@@ -5,10 +5,35 @@
 // Dependencies
 const url = require('url');
 const http = require('http');
+const https = require('https');
 const { StringDecoder } = require('string_decoder');
+const fs = require('fs');
 const config = require('./config');
 
-const server = http.createServer((req, res) => {
+// Instantiate http server
+const httpServer = http.createServer((req, res) => {
+  unifiedServer(req, res);
+});
+
+httpServer.listen(config.httpPort, () => {
+  console.log(`The server now listening to port ${config.httpPort} in ${config.envName} mode`);
+});
+
+// Instantiate https server
+const httpsServerOptions = {
+  key: fs.readFileSync('./https/key.pem'),
+  cert: fs.readFileSync('./https/cert.pem'),
+};
+const httpsServer = https.createServer(httpsServerOptions, (req, res) => {
+  unifiedServer(req, res);
+});
+
+httpsServer.listen(config.httpsPort, () => {
+  console.log(`The server now listening to port ${config.httpsPort} in ${config.envName} mode`);
+});
+
+// All unified logic for http & https servers
+const unifiedServer = (req, res) => {
   // Get the URL and parse it
   const parsedUrl = url.parse(req.url, true);
 
@@ -60,11 +85,7 @@ const server = http.createServer((req, res) => {
       console.log('Returning this response: ', statusCode, payloadString);
     });
   });
-});
-
-server.listen(config.port, () => {
-  console.log(`The server now listening to port ${config.port} in ${config.envName} mode`);
-});
+};
 
 // Define handlers
 let handlers = {};
@@ -81,4 +102,4 @@ handlers.notFound = (data, callback) => {
 // Define a request router
 const router = {
   sample: handlers.sample,
-}
+};
