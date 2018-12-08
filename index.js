@@ -9,6 +9,7 @@ const https = require('https');
 const { StringDecoder } = require('string_decoder');
 const fs = require('fs');
 const config = require('./config');
+const router = require('./lib/router');
 
 // Instantiate http server
 const httpServer = http.createServer((req, res) => {
@@ -60,7 +61,7 @@ const unifiedServer = (req, res) => {
     buffer += decoder.end();
 
     // Choose the right handler
-    const chosenHandler = (typeof router[trimmedPath] !== 'undefined') ? router[trimmedPath] : handlers.notFound;
+    const chosenHandler = (typeof router[trimmedPath] !== 'undefined') ? router[trimmedPath] : router.notFound;
 
     // construct data object
     const data = {
@@ -85,21 +86,4 @@ const unifiedServer = (req, res) => {
       console.log('Returning this response: ', statusCode, payloadString);
     });
   });
-};
-
-// Define handlers
-let handlers = {};
-
-// Sample handler
-handlers.sample = (data, callback) => {
-  callback(406, { name: 'Sample handler' });
-};
-// Not Found handler
-handlers.notFound = (data, callback) => {
-  callback(404);
-};
-
-// Define a request router
-const router = {
-  sample: handlers.sample,
 };
