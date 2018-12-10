@@ -10,6 +10,7 @@ environments.staging = {
   httpPort: 3000,
   httpsPort: 3001,
   envName: 'staging',
+  hashingSecret: 'ThisIsASecret',
 };
 
 // Production (default) environment
@@ -17,6 +18,7 @@ environments.production = {
   httpPort: 5000,
   httpsPort: 5001,
   envName: 'production',
+  hashingSecret: 'ThisIsASecret',
 };
 
 // Determine which environment to export
