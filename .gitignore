@@ -1,3 +1,9 @@
+# Project
+.data/users
+.data/tokens
+.data/checks
+.data/test
+
 # Logs
 logs
 *.log
