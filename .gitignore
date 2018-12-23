@@ -3,6 +3,7 @@
 .data/tokens
 .data/checks
 .data/test
+.logs/
 
 # Logs
 logs
